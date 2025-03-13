@@ -58,7 +58,7 @@ public_users.get('/isbn/:isbn',function (req, res) {
 
     }
     if(index >= 0) {
-        res.send(books[index].title);
+        res.send(JSON.stringify(books[index],null,"\t"));
     }
     else {
         // Return error if book could not be found
@@ -70,15 +70,19 @@ public_users.get('/isbn/:isbn',function (req, res) {
 // Get book details based on author
 public_users.get('/author/:author',function (req, res) {
     let found = false;
+    let key = -1;
     const author = req.params.author;
+    let booksByAuthor = [];
 
     for (let key in books) {  
         if(author == books[key].author) {
+            index = key;
+            booksByAuthor.push(books[key]);
             found = true;
         }
     }
     if(found === true) {
-        res.send(books[key].title);
+        res.send(JSON.stringify(booksByAuthor,null,"\t"));
     }
     else {
         // Return error if book could not be found
@@ -90,16 +94,17 @@ public_users.get('/author/:author',function (req, res) {
 public_users.get('/title/:title',function (req, res) {
     let found = false;
     let index = -1;
+    let booksByTitle = [];
     const title = req.params.title;
 
     for (let key in books) {  
         if(title == books[key].title) {
-            index = key;
+            booksByTitle.push(books[key]);
             found = true;
         }
     }
     if(found === true) {
-        res.send(JSON.stringify(books[index]));
+        res.send(JSON.stringify(booksByTitle,null,"\t"));
     }
     else {
         // Return error if book could not be found
@@ -111,16 +116,17 @@ public_users.get('/title/:title',function (req, res) {
 public_users.get('/review/:isbn',function (req, res) {
     let found = false;
     let index = -1;
+    let bookReviews = {};
     const isbn = parseInt(req.params.isbn);
 
     for (let key in books) {  
         if(isbn == key) {
-            index = key;
+            bookReviews = books[key].reviews;
             found = true;
         }
     }
     if(found === true) {
-        res.send(books[index].reviews);
+        res.send(bookReviews);
     }
     else {
         // Return error if book could not be found
