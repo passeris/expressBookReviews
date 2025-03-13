@@ -1,8 +1,9 @@
 const express = require('express');
 let books = require("./booksdb.js");
 let isValid = require("./auth_users.js").isValid;
-let users = require("./auth_users.js").users;
 const public_users = express.Router();
+let users = require("./auth_users.js").users;
+
 
 // Check if a user with the given username already exists
 const doesExist = (username) => {
@@ -20,7 +21,7 @@ const doesExist = (username) => {
 
 
 public_users.post("/register", (req,res) => {
-const username = req.body.username;
+    const username = req.body.username;
     const password = req.body.password;
 
     // Check if both username and password are provided
@@ -133,9 +134,5 @@ public_users.get('/review/:isbn',function (req, res) {
         return res.status(404).json({message: "Book not found."});
     }
 });
-
-
-
-
 
 module.exports.general = public_users;
